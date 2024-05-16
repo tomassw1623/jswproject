@@ -1,23 +1,38 @@
 package org.zerock.testproject.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.zerock.testproject.domain.CustomerReservation;
+import org.zerock.testproject.dto.ReservationDTO;
 import org.zerock.testproject.service.ReservationService;
 
-@RestController
-@RequestMapping("/reservation")
+@Controller
+@RequiredArgsConstructor
+@Log4j2
 public class ReservationController {
 
-    @Autowired
-    private ReservationService reservationService;
+    private final ReservationService reservationService;
 
-    @PostMapping("/create")
-    public void createReservation(@RequestBody CustomerReservation reservation) {
-        reservationService.createReservation(reservation);
+    public ReservationController(ReservationService reservationService) {
+        this.reservationService = reservationService;
     }
 
+    @GetMapping("/reservation")
+    public String showReservationForm(Model model) {
+        model.addAttribute("reservationDTO", new ReservationDTO());
+        return "reservation";
+    }
+
+    @PostMapping("/reservation")
+    public String handleReservation(@ModelAttribute ReservationDTO reservationDTO, Model model) {
+        reservationService.(reservationDTO);
+        model.addAttribute("message", "예약이 완료되었습니다.");
+        return "reservation";
+    }
+
+    @
 }
